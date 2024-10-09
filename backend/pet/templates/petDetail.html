@@ -1,0 +1,164 @@
+{% extends "base.html" %} {% load static %} {% block title %}Informações do
+Pet{% endblock title %} {% block content %}
+<div id="petDetail">
+    <div id="t1">
+        <div id="titulo">
+            <img src="{{ pet.images_pets.first.image_pet_profile.url }}" alt="Foto de perfil do pet {{ pet.name }}">
+            <h1>Oi, eu sou {% if pet.sex == "Female" %}a {% else %}o {% endif %} <span style="text-transform: capitalize;">{{ pet.name }}</span>!</h1>
+        </div>
+        <div id="btns">
+            <form method="post" action="{% url 'pets:toggle_favorited' pk=pet.pk %}">
+                {% csrf_token %}
+                <button type="submit" id="favoritar">
+                    {% if is_favorited %}
+                    <i style="color: #b40000;" class="fi fi-sr-heart" id="coracao"></i>
+                {% else %}
+                    <i style="color: #fff;" class="fi fi-sr-heart" id="coracao"></i>
+                {% endif %}
+                    Favoritar
+                </button>
+            </form>
+
+
+            <form method="post" action="{% url 'adoption:adoption-pet' pk=pet.pk %}">
+                {% csrf_token %}
+                <button type="submit" id="queroAdotar">
+                    <i class="fi fi-sr-star"></i>
+                    Adotar
+                </button>
+            </form>
+
+            <form method="post" action="{% url 'adoption:share-pet' pk=pet.pk %}">
+                {% csrf_token %}
+                <button id="compartilharBtn" type="submit">
+                    <i class="fi fi-sr-share"></i>
+                    Compartilhar
+                </button>
+            </form>
+
+        </div>
+    </div>
+<div id="main">
+            <!-- Galeria de Fotos -->
+            <section id="galeria">
+                <h2>Galeria de Fotos</h2>
+                <div id="bigPhoto" class="big-photo">
+                    <img id="mainPhoto" src="{{ pet.images_pets.first.image_pet_profile.url }}" alt="Foto de perfil do pet {{ pet.name }}">
+                </div>
+                <div class="gallery">
+                    <img src="{{ pet.images_pets.first.image_pet_profile.url }}" alt="Foto de perfil do pet {{ pet.name }}" onclick="changePhoto(this)">
+                    <img src="{{ pet.images_pets.first.image_pet_datail1.url }}" alt="Foto de perfil do pet {{ pet.name }}" onclick="changePhoto(this)">
+                    <img src="{{ pet.images_pets.first.image_pet_datail2.url }}" alt="Foto de perfil do pet {{ pet.name }}" onclick="changePhoto(this)">
+                    <img src="{{ pet.images_pets.first.image_pet_datail3.url }}" alt="Foto de perfil do pet {{ pet.name }}" onclick="changePhoto(this)">
+                </div>
+            </section>
+
+            <div id="modal" class="modal">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <img class="modal-content" id="modalImage">
+            </div>
+            <script>
+                let mainPhoto = document.getElementById('mainPhoto');
+                let modal = document.getElementById('modal');
+                let modalImage = document.getElementById('modalImage');
+                let galleryImages = document.querySelectorAll('.gallery img');
+                let currentIndex = 0;
+                let timer;
+
+                function changePhoto(imgElement) {
+                    mainPhoto.src = imgElement.src;
+                    currentIndex = Array.from(galleryImages).indexOf(imgElement);
+                    resetTimer();
+                }
+
+                mainPhoto.onclick = function() {
+                    modal.style.display = "flex";
+                    modalImage.src = this.src;
+                }
+
+                function closeModal() {
+                    modal.style.display = "none";
+                }
+
+                function nextPhoto() {
+                    currentIndex = (currentIndex + 1) % galleryImages.length;
+                    mainPhoto.src = galleryImages[currentIndex].src;
+                }
+
+                function resetTimer() {
+                    clearInterval(timer);
+                    timer = setInterval(nextPhoto, 10000);
+                }
+
+                document.addEventListener('DOMContentLoaded', (event) => {
+                    timer = setInterval(nextPhoto, 10000);
+                });
+
+            </script>
+    <div id="details">
+        <!-- Informações básicas -->
+        <section id="informacoes-basicas">
+            <h2>Informações Básicas</h2>
+            <ul>
+                <li><strong>Nome:</strong> {{ pet.name }}</li>
+                <li><strong>Idade:</strong> {{ pet.age }} anos</li>
+                <li><strong>Especie:</strong> {% if pet.species == "DOG" %} Cachorro {% else %} Gato{% endif %}</li>
+                <li><strong>Cor:</strong> {{ pet.color }}</li>
+                <li><strong>Raça:</strong> {{ pet.breed }}</li>
+                <li><strong>Peso:</strong> {{ pet.weight }}kg</li>
+                <li><strong>Genero:</strong> {% if pet.sex == "Male" %} Macho {% else %} Femea{% endif %}</li>
+                <li>
+                    <strong>Tamanho:</strong>
+                    {% if pet.size == "SMALL" %}
+                      Pequeno
+                    {% elif pet.size == "Medium" %}
+                      Medio
+                    {% else %}
+                      Grande
+                    {% endif %}
+                  </li>
+                <li><strong>Altura:</strong> {{ pet.heigth }}cm</li>
+                <li style="text-transform: capitalize;"><strong>Atual Cuidador:</strong> {{ pet.owner }}</li>
+            </ul>
+        </section>
+
+        <!-- Histórico -->
+        <section id="historico">
+            <h2>História</h2>
+            <p>
+               {{pet.history_pet.first.history}}
+            </p>
+        </section>
+
+        <!-- Histórico Médico -->
+        <section id="historico-medico">
+            <h2>Histórico Médico</h2>
+            <ul>
+                <li><strong>Ja foi castrado? </strong> {% if pet.medical_records.first.castreated == True %} Sim {% else %}Nao{% endif %}</li>
+                <li><strong>ja foi vacinado?</strong> {% if pet.medical_records.first.vaccines == True %} Sim{% else %} Nao{% endif %}</li>
+                {% if pet.medical_records.first.vaccines == True %}
+                <p><strong> Descrição da vacina:</strong>  {{ pet.medical_records.first.vaccine_description}}</p>
+                {% endif %}
+                <li><strong>tem algum parasita? </strong> {% if  pet.medical_records.first.dewormed == True %} Sim{% else %} Nao{% endif %}</li>
+                {% if pet.medical_records.first.dewormed == True %}
+                <p><strong> Descrição do parasita :</strong>  {{ pet.medical_records.first.dewormer_description}}</p>
+                {% endif %}
+                <p><strong> Histórico Médico: </strong>  {{ pet.medical_records.first.medical_history}}</p>
+            </ul>
+        </section>
+
+        <!-- Observacoes -->
+        <section id="Observacoes">
+            <h2>Observacoes</h2>
+            <p>
+                {{pet.history_pet.first.observations}}
+            </p>
+        </section>
+    </div>
+
+</div>
+
+
+
+</div>
+{% endblock content %}

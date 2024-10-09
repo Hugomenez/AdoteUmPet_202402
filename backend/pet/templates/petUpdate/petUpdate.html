@@ -1,0 +1,102 @@
+{% extends "createPetBase.html" %}
+{% block form_title %}Informações Básicas {% endblock form_title %}
+{% block default_content %}
+{% endblock default_content %}
+{% block form_content %}
+<form id="form1" method="post">
+    {% csrf_token %}
+    <div id="div1">
+        <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Nome do Pet"
+            value="{{pet.name}}"
+            required
+        />
+        <input
+            type="text"
+            name="breed"
+            placeholder="Raça"
+            id="breed"
+            value="{{pet.breed}}"
+            required
+        />
+    </div>
+
+    <div>
+        <select name="species" id="species" required>
+            <option value="0">Espécie</option>
+            <option value="DOG" {% if species == Species.DOG %}selected{% endif %}>Cachorro</option>
+            <option value="CAT" {% if species == Species.CAT %}selected{% endif %}>Gato</option>
+        </select>
+        <select name="sex" id="sex" required>
+            <option value="0">Sexo</option>
+            <option value="Male" {% if sex == Sex.Male %}selected{% endif %}>Macho</option>
+            <option value="Female" {% if sex == Sex.Female%}selected{% endif %}>Fêmea</option>
+        </select>
+        <input
+            name="color"
+            type="text"
+            placeholder="Cor"
+            id="color"
+            required
+            value="{{pet.color}}"
+        />
+    </div>
+
+    <div>
+        <select name="size" id="size" required>
+            <option value="0">Tamanho</option>
+            <option value="SMALL" {% if size == Size.SMALL %}selected{% endif %}>Pequeno</option>
+            <option value="MEDIUM" {% if size == Size.MEDIUM %}selected{% endif %}>Medio</option>
+            <option value="Large" {% if size == Size.Large %}selected{% endif %}>Grande</option>
+        </select>
+        <input
+            name="age"
+            type="number"
+            placeholder="Idade em anos"
+            id="age"
+            value="{{pet.age}}"
+            required
+        />
+        <input
+            name="heigth"
+            type="number"
+            placeholder="Altura em cm"
+            id="size"
+            value="{{pet.heigth}}"
+            required
+        />
+        <input
+        name="weight"
+        type="number"
+        placeholder="Peso em Kg"
+        id="weight"
+        value="{{pet.weight}}"
+        required
+    />
+    </div>
+    <div id="btnArea">
+        <button id="submit" class="submit" type="submit" >Próximo</button>
+    </div>
+
+    {% if form.errors %}
+    <div id="error-messages-mobile" class="alerts alert-dangers">
+        <button type="button" class="closeE" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">X</span>
+        </button>
+        <ul id="error-list">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</form>
+{% endblock form_content %}

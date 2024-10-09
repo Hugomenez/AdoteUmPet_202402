@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<main class="listScreen">
+    {% if pet %}
+    {% for pets in pet %}
+            <a href="{% url 'pets:pet_detail' pk=pets.id %}"  class="petSaved">
+                {% if pets.images_pets.first.image_pet_profile %}
+                        <img src="{{ pets.images_pets.first.image_pet_profile.url }}" alt="Foto de perfil do pet {{ pets.name }}">
+                        <h1>{{pets.name}}</h1>
+                        <form method="post" action="{% url 'pets:toggle_favorited_saved' pk=pets.pk %}" class="heartIcon">
+                            {% csrf_token %}
+                            <button type="submit" class="favIconHeart"><i class="fi fi-ss-heart"></i></button>
+                        </form>
+                {% endif %}
+            </a>
+            {% endfor %}
+            {% else %}
+            <div id="nopet">
+                <h1>Desculpa, você está sem nenhuma pet cadastrado no momento </h1>
+                <img src="{% static "assets/img/cat_sad.jpg" %}" alt="">
+            </div>
+
+            {% endif %}
+
+</main>
+
+{% endblock content %}
