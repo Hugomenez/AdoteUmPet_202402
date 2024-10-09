@@ -1,0 +1,72 @@
+{% extends "createPetBase.html" %}
+{% block form_title %}Fotos{% endblock form_title %}
+{% block default_content %}{% endblock default_content %}
+{% load static %}
+{% block form_content %}
+<form id="form4" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div id="f4d01">
+        <label for="profilePet">Foto Principal do Pet</label>
+        <input type="file" name="image_pet_profile" id="profilePet" accept="image/*">
+        <label id="labelDiv" for="profilePet">
+            <div id="main-photo-preview">
+                <i id="ibtn" class="fi fi-br-plus"></i>
+                <img id="main-photo-preview-img" src="" alt="" style="display: none;">
+            </div>
+        </label>
+    </div>
+    <div id="f4d02">
+        <label for="adicPhoto">Fotos Extras do Pet</label>
+        <div id="f4d03">
+            <input type="file" name="image_pet_datail1" id="image_pet_datail1" accept="image/*">
+            <label for="image_pet_datail1">
+                <div class="extra-photo-preview" id="extra-photo-preview-1">
+                    <i id="ibtn1" class="fi fi-br-plus"></i>
+                    <img id="extra-photo-preview-img-1" src="" alt="" style="display: none;">
+                </div>
+            </label>
+
+            <input type="file" name="image_pet_datail2" id="image_pet_datail2" accept="image/*">
+            <label for="image_pet_datail2">
+                <div class="extra-photo-preview" id="extra-photo-preview-2">
+                    <i id="ibtn2" class="fi fi-br-plus"></i>
+                    <img id="extra-photo-preview-img-2" src="" alt="" style="display: none;">
+                </div>
+            </label>
+
+            <input type="file" name="image_pet_datail3" id="image_pet_datail3" accept="image/*">
+            <label for="image_pet_datail3">
+                <div class="extra-photo-preview" id="extra-photo-preview-3">
+                    <i id="ibtn3" class="fi fi-br-plus"></i>
+                    <img id="extra-photo-preview-img-3" src="" alt="" style="display: none;">
+                </div>
+            </label>
+        </div>
+    </div>
+    <span>*Todas as fotos são obrigatorias</span>
+
+    <div id="btnArea">
+        <button class="submit" type="submit">Finalizar</button>
+    </div>
+
+    {% if form.errors %}
+    <div id="error-messages-mobile" class="alerts alert-dangers">
+        <button type="button" class="closeE" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">X</span>
+        </button>
+        <ul id="error-list">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</form>
+
+<script src=" {% static "assets/js/petcadastro.js" %} "></script>
+{% endblock form_content %}

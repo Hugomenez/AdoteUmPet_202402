@@ -1,0 +1,45 @@
+{% extends "createPetBase.html" %}
+{% block form_title %}Informações Médicas{% endblock form_title %}
+{% block default_content %}{% endblock default_content %}
+{% block form_content %}
+
+<form method="post" id="form2">
+    {% csrf_token %}
+      <div id="divLabel">
+        <label>O pet é castrado?</label>
+        <select name="castreated" id="size" required>
+            <option value="True">Sim</option>
+            <option value="False">Não</option>
+        </select>
+      </div>
+      <div id="divLabel">
+        <label>Ja foi vacinado?</label>
+        <select name="vaccines" id="size" required>
+            <option value="True">Sim</option>
+            <option value="False">Não</option>
+        </select>
+      </div>
+    <div>
+      <label for="vaccine_description">Se sim, quais vacinas foram aplicadas?</label>
+      <textarea name="vaccine_description" id="vaccine_description"  rows="2"></textarea>
+    </div>
+  <div id="divLabel">
+    <label> O pet tem parasitas?</label>
+    <select name="dewormed" id="size" required>
+        <option value="True">Sim</option>
+        <option value="False">Não</option>
+    </select>
+  </div>
+  <div>
+    <label for="dewormer_description">Se tem algum, quais?</label>
+    <textarea name="dewormer_description" id="dewormer_description"  rows="2"></textarea>
+  </div>
+  <div>
+    <label for="medical_history">Historico medico:</label>
+    <textarea name="medical_history" id="medical_history"  rows="2"></textarea>
+  </div>
+  <div id="btnArea">
+    <button class="submit" type="submit">Proximo</button>
+  </div>
+  </form>
+  {% endblock form_content %}

@@ -1,0 +1,130 @@
+{% extends "createPetBase.html" %}
+{% block form_title %}Informações Básicas {% endblock form_title %}
+{% block default_content %}
+{% endblock default_content %}
+{% block form_content %}
+<form id="form1" method="post">
+    {% csrf_token %}
+    <div id="div1">
+        <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Nome do Pet"
+            value="{{pet.name}}"
+            required
+        />
+        <input
+            type="text"
+            name="breed"
+            placeholder="Raça"
+            id="breed"
+            value="{{pet.breed}}"
+            required
+        />
+    </div>
+
+    <div>
+        <select name="species" id="species" required>
+            <option value="0">Espécie</option>
+            <option value="DOG">Cachorro</option>
+            <option value="CAT">Gato</option>
+        </select>
+        <select name="sex" id="sex" required>
+            <option value="0">Sexo</option>
+            <option value="Male">Macho</option>
+            <option value="Female">Fêmea</option>
+        </select>
+        <input
+            name="color"
+            type="text"
+            placeholder="Cor"
+            id="color"
+            required
+            value="{{pet.color}}"
+        />
+    </div>
+
+    <div>
+        <select name="size" id="size" required>
+            <option value="0">Tamanho</option>
+            <option value="SMALL">Pequeno</option>
+            <option value="MEDIUM">Medio</option>
+            <option value="Large">Grande</option>
+        </select>
+        <input
+            name="age"
+            type="text"
+            placeholder="Idade em anos"
+            id="age"
+            required
+        />
+        <input
+            name="heigth"
+            type="text"
+            placeholder="Altura em cm"
+            id="height"
+            required
+        />
+        <input
+            name="weight"
+            type="text"
+            placeholder="Peso em Kg"
+            id="weight"
+            required
+        />
+    </div>
+    <div id="btnArea">
+        <button id="submit" class="submit" type="submit" disabled>Próximo</button>
+    </div>
+
+
+    {% if form.errors %}
+    <div id="error-messages-mobile" class="alerts alert-dangers">
+        <button type="button" class="closeE" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">X</span>
+        </button>
+        <ul id="error-list">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</form>
+
+<script>
+    const form = document.getElementById('form1');
+    const submitButton = document.getElementById('submit');
+    const inputs = form.querySelectorAll('input, select');
+
+    function checkFormValidity() {
+        let allFieldsFilled = true;
+
+        inputs.forEach(input => {
+            if (input.value.trim() === '' || input.value === '0') {
+                allFieldsFilled = false;
+            }
+        });
+
+        if (allFieldsFilled) {
+            submitButton.disabled = false;
+            submitButton.classList.remove('disabled-button');
+        } else {
+            submitButton.disabled = true;
+            submitButton.classList.add('disabled-button');
+        }
+    }
+
+    inputs.forEach(input => {
+        input.addEventListener('input', checkFormValidity);
+    });
+
+    window.addEventListener('load', checkFormValidity);
+</script>
+{% endblock form_content %}

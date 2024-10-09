@@ -1,0 +1,76 @@
+{% load static %}
+<header>
+    <div id="left">
+        <a href="/" id="logo"><img src="{% static "assets/img/LogoAdoteUmPet.png" %}" alt="logo" ></a>
+        <a href="/" id="logoText">Adote um Pet</a>
+        <a class="la" href="{% url "pets:pet-faq" %}" id="duvidasFrequentes">Duvidas frequentes</a>
+        <p class="la" id="filtro">Filtros <span id="arrow">&#x25BE;</span></p>
+    </div>
+    <div id="right">
+        <i class="fi fi-br-menu-burger" id="menuIconMobile"></i>
+        <div id="search">
+            <i class="fi fi-br-search" id="searchIcon"></i
+            ><input
+                type="text"
+                name="search"
+                id="searchInp"
+                placeholder="Pesquisar"
+            />
+        </div>
+        {% if not request.user.is_authenticated %}
+
+        <a href="{% url "userauths:sign-in" %}">
+        <button id="entrar">Entrar</button>
+        </a>
+        {% else %}
+        <div id="avatar">
+            {% if user.image_user_profile %}
+                <img src="{{user.image_user_profile.url}}" alt="Avatar" id="avatarImg">
+            {% else %}
+                <img src="{% static "assets/img/avatar.jpg" %}" alt="Avatar" id="avatarImg">
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    <div id="userNav" style="display: none">
+        <h3 id="usuario">
+            Olá
+            <span id="usuarioName" style="color: var(--color-main)"
+                ><script>
+                    var fullName = "{{ user.username }}";
+                    var firstName = fullName.split(' ')[0];
+                    document.write(firstName);
+                </script></span
+            >!
+        </h3>
+
+        <ul>
+            <a  href="{% url "pets:pet-saves" %} " class="menu-item">
+                <span>Animais Favoritados</span>
+                <i class="fi fi-br-heart"></i>
+            </a>
+            <a href="{% url "adoption:adoption-list" %} " class="menu-item">
+                <span>Historico</span>
+                <i class="fi fi-br-clock"></i>
+            </a>
+            <a href="{% url "pets:pet-added" %}" class="menu-item">
+                <span>Animais Adicionados</span>
+                <i class="fi fi-br-list"></i></a>
+            <a href="{% url "userauths:user-config" %}" class="menu-item">
+                <span>Configurações</span>
+                <i class="fi fi-br-settings"></i>
+            </a>
+            <a href="{% url "userauths:sign-out" %}" class="menu-item" id="changeProfile" >
+                <span>Trocar de conta</span>
+                <i class="fi fi-br-exchange"></i>
+            </a>
+        </ul>
+
+        <form  method="get" action="{% url 'adoption:check-fields' %}">
+            <button id="trocarCargo" type="submit">Adicionar pet</button>
+        </form>
+        {% if user.is_superuser %}
+        <a href="{% url 'admin:index' %}" id="adminButton"> Area de admin</a>
+        {% endif %}
+    </div>
+</header>
